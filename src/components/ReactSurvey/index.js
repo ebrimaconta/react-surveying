@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import animate from 'animate.css';
-import styles from './index.css';
+import React, { useState, useEffect } from 'react';
+import 'animate.css';
+import './index.css';
 
 const themes = {
   purple: ['#6D4B94', '#7C6497', '#6D4B943B'],
@@ -11,21 +11,36 @@ const themes = {
   cyan: ['#00BCDD', '#00BCDD', '#00BCDD3B'],
 };
 
-export const ReactSurvey = ({ question, answers, onVote, customStyles, disable }) => {
+export const ReactSurvey = ({
+  question,
+  answers,
+  onVote,
+  noStorage,
+  customStyles = {
+    questionSeparator: true,
+    questionSeparatorWidth: 'question',
+    questionBold: true,
+    questionColor: '#303030',
+    align: 'center',
+    theme: 'black',
+  },
+  disable = false,
+}) => {
   const [pollData, setPollData] = useState({
     poll: {
       voted: false,
       option: '',
     },
-    totalVotes: answers.reduce((total, answer) => total + answer.votes, 0),
+    totalVotes: 0,
   });
 
   const calculatePercent = (votes, total) => {
     if (votes === 0 && total === 0) {
       return '0%';
     }
-    return `${parseInt((votes / total) * 100)}%`;
+    return `${parseInt((votes / total) * 100, 10)}%`;
   };
+
   const alignPoll = (customAlign) => {
     if (customAlign === 'left') {
       return 'flex-start';
@@ -47,7 +62,7 @@ export const ReactSurvey = ({ question, answers, onVote, customStyles, disable }
 
   const setPollVote = (selectedAnswer) => {
     const optionsOnly = answers.map((item) => item.option);
-
+    console.log('selectedAnswer', selectedAnswer);
     if (optionsOnly.includes(selectedAnswer)) {
       const { poll, totalVotes } = pollData;
       const updatedPoll = {
@@ -57,35 +72,67 @@ export const ReactSurvey = ({ question, answers, onVote, customStyles, disable }
       };
 
       if (!disable) {
-        if (!vote) {
-          setPollData({
+        if (!poll.voted) {
+          setPollData(() => ({
             poll: updatedPoll,
             totalVotes: totalVotes + 1,
-          });
+          }));
+          console.log('not voted');
         } else {
-          setPollData({
+          console.log(' voted');
+          setPollData((prev) => ({
+            ...prev,
             poll: updatedPoll,
-          });
+          }));
         }
       }
     }
   };
 
+  const checkVote = () => {
+    const storage = getStoragePolls();
+    const answer = storage.filter((answer) => answer.question === question && answer.url === window.location.href);
+
+    if (answer.length) {
+      setPollVote(answer[0].option);
+    }
+  };
+
+  useEffect(() => {
+    if (!noStorage) checkVote();
+    
+    setPollData((prev) => ({
+      ...prev,
+      totalVotes: answers.reduce((total, answer) => total + answer.votes, 0),
+    }));
+  }, []);
+
+ 
+  const getStoragePolls = () => JSON.parse(localStorage.getItem('react-polls')) || [];
   const vote = (answer) => {
+    if (!noStorage) {
+      const storage = getStoragePolls();
+      storage.push({
+        url: window.location.href,
+        question: question,
+        option: answer,
+      });
+      localStorage.setItem('react-polls', JSON.stringify(storage));
+    }
     setPollVote(answer);
     onVote(answer);
   };
   const { poll, totalVotes } = pollData;
   return (
     <article
-      className={`${animate.animated} ${animate.fadeIn} ${animate.faster} ${styles.poll}`}
+      className={`animate__animated animate__fadeIn animate__faster poll`}
       style={{
         textAlign: customStyles.align,
         alignItems: alignPoll(customStyles.align),
       }}
     >
       <h3
-        className={styles.question}
+        className='question'
         style={{
           borderWidth: customStyles.questionSeparator ? '1px' : '0',
           alignSelf: customStyles.questionSeparatorWidth === 'question' ? 'center' : 'stretch',
@@ -95,14 +142,12 @@ export const ReactSurvey = ({ question, answers, onVote, customStyles, disable }
       >
         {question}
       </h3>
-      <ul className={styles.answers}>
+      <ul className='answers'>
         {answers.map((answer) => (
           <li key={answer.option}>
             {!poll.voted ? (
               <button
-                className={`${animate.animated} ${animate.fadeIn} ${animate.faster} ${styles.option} ${
-                  styles[customStyles.theme]
-                }`}
+                className={`animate__animated  animate__fadeIn animate__faster  option ${customStyles.theme}`}
                 style={{ color: colors[0], borderColor: colors[1] }}
                 type='button'
                 onClick={() => vote(answer.option)}
@@ -112,22 +157,22 @@ export const ReactSurvey = ({ question, answers, onVote, customStyles, disable }
               </button>
             ) : (
               <div
-                className={`${animate.animated} ${animate.fadeIn} ${animate.faster} ${styles.result}`}
+                className={`animate__animated animate__fadeIn animate__faster result`}
                 style={{ color: colors[0], borderColor: colors[1] }}
               >
                 <div
-                  className={styles.fill}
+                  className='fill'
                   style={{
                     width: calculatePercent(answer.votes, totalVotes),
                     backgroundColor: colors[2],
                   }}
                 />
-                <div className={styles.labels}>
-                  <span className={styles.percent} style={{ color: colors[0] }}>
+                <div className='label'>
+                  <span className='percent' style={{ color: colors[0] }}>
                     {calculatePercent(answer.votes, totalVotes)}
                   </span>
                   <span
-                    className={`${styles.answer} ${answer.option === poll.option ? styles.vote : ''}`}
+                    className={`answer ${answer.option === poll.option ? 'vote' : ''}`}
                     style={{ color: colors[0] }}
                   >
                     {answer.option}
@@ -138,7 +183,7 @@ export const ReactSurvey = ({ question, answers, onVote, customStyles, disable }
           </li>
         ))}
       </ul>
-      <p className={styles.votes}>{`${totalVotes} vote${totalVotes !== 1 ? 's' : ''}`}</p>
+      <p className='votes'>{`${totalVotes} vote${totalVotes !== 1 ? 's' : ''}`}</p>
     </article>
   );
 };

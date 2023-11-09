@@ -93,7 +93,7 @@
 
 .poll .answers .result .fill {
     width: 0%;
-    height: 100%;
+    margin-top: 10px;
     border-radius: 3px;
     display: flex;
     align-items: center;
