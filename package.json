@@ -1,6 +1,6 @@
 {
   "name": "react-surveying",
-  "version": "0.1.5",
+  "version": "0.1.7",
   "private": false,
   "main": "dist/index.js",
   "module": "dist/index.es.js",
@@ -57,9 +57,9 @@
     "dist"
   ],
   "bugs": {
-    "url": "https://github.com/viniciusmeneses/react-polls/issues"
+    "url": "https://github.com/ebrimaconta/react-surveying/issues"
   },
-  "homepage": "https://github.com/viniciusmeneses/react-polls#readme",
+  "homepage": "https://github.com/ebrimaconta/react-surveying",
   "keywords": [
     "react",
     "poll",
