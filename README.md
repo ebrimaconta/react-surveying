@@ -10,6 +10,12 @@ You can install the React Poll package using npm or yarn:
 npm install react-surveying
 ```
 
+or
+
+```bash
+yarn add react-surveying
+```
+
 ```jsx
 import React from 'react';
 import { ReactSurvey } from 'react-surveying';
