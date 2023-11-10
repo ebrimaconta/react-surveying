@@ -16,11 +16,6 @@
     "prepare": "yarn test",
     "deploy": "cd example && npm install && npm run build"
   },
-  "husky": {
-    "hooks": {
-      "pre-commit": "yarn test"
-    }
-  },
   "peerDependencies": {
     "prop-types": "^15.5.4",
     "react": "^15.0.0 || ^16.0.0",
