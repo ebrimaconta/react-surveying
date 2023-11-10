@@ -10,7 +10,7 @@
     "npm": ">=5"
   },
   "scripts": {
-    "test": "jest",
+    "test": "jest ",
     "build": "yarn test && rollup -c",
     "start": "react-scripts start",
     "prepare": "yarn test",
