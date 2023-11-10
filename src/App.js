@@ -22,5 +22,13 @@ export const App = () => {
   };
   console.log('poll handleVote', poll);
 
-  return <ReactSurvey question={question} answers={poll.pollAnswers} onVote={handleVote} />;
+  return (
+    <ReactSurvey
+      userEmail={'ebrima.contawwe'}
+      listVoted={['ebrima.conta']}
+      question={question}
+      answers={poll.pollAnswers}
+      onVote={handleVote}
+    />
+  );
 };

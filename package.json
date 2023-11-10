@@ -1,6 +1,6 @@
 {
   "name": "react-surveying",
-  "version": "1.2.4",
+  "version": "1.2.6",
   "private": false,
   "main": "dist/index.js",
   "module": "dist/index.es.js",
@@ -13,7 +13,6 @@
     "test": "jest ",
     "build": "yarn test && rollup -c",
     "start": "react-scripts start",
-    "prepare": "yarn test",
     "deploy": "cd example && npm install && npm run build"
   },
   "peerDependencies": {
@@ -53,7 +52,8 @@
     "rollup-plugin-node-resolve": "^3.3.0",
     "rollup-plugin-peer-deps-external": "^2.2.0",
     "rollup-plugin-postcss": "^1.6.2",
-    "rollup-plugin-url": "^1.4.0"
+    "rollup-plugin-url": "^1.4.0",
+    "webpack": "^5.89.0"
   },
   "files": [
     "dist"

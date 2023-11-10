@@ -42,7 +42,8 @@ const ReactSurvey = ({
   question,
   answers,
   onVote,
-  noStorage,
+  userEmail = '',
+  listVoted = [],
   customStyles = {
     questionSeparator: true,
     questionSeparatorWidth: 'question',
@@ -78,37 +79,16 @@ const ReactSurvey = ({
     return colors;
   };
   const colors = obtainColors(customStyles.theme);
-  const setPollVote = () => {
-    setVoted(true);
-  };
-  const checkVote = () => {
-    const storage = getStoragePolls();
-    const answer = storage.filter(answer => answer.question === question && answer.url === window.location.href);
-    if (answer.length) {
-      setPollVote(answer[0].option);
-    }
-  };
   useEffect(() => {
-    if (!noStorage) checkVote();
     setTotalVotes(answers.reduce((total, answer) => total + answer.votes, 0));
   }, []);
-  const getStoragePolls = () => JSON.parse(localStorage.getItem('react-polls')) || [];
-  const vote = answer => {
-    if (voted === false && !disable) {
+  const vote = () => {
+    if (!disable) {
       setTotalVotes(totalVotes + 1);
       setVoted(!voted);
-      if (!noStorage) {
-        const storage = getStoragePolls();
-        storage.push({
-          url: window.location.href,
-          question: question,
-          option: answer
-        });
-        localStorage.setItem('react-polls', JSON.stringify(storage));
-      }
     }
-    onVote(answer);
   };
+  const checkIfVoted = listVoted.includes(userEmail);
   return /*#__PURE__*/React.createElement("article", {
     className: `animate__animated animate__fadeIn animate__faster poll`,
     style: {
@@ -127,20 +107,25 @@ const ReactSurvey = ({
     className: "answers"
   }, answers.map(answer => /*#__PURE__*/React.createElement("li", {
     key: answer.option
-  }, !voted ? /*#__PURE__*/React.createElement("button", {
+  }, !checkIfVoted ? /*#__PURE__*/React.createElement("button", {
     className: `animate__animated  animate__fadeIn animate__faster  option ${customStyles.theme}`,
     style: {
       color: colors[0],
       borderColor: colors[1]
     },
     type: "button",
-    onClick: e => vote(answer.option),
-    "aria-label": answer.option
+    onClick: e => {
+      onVote(answer);
+      vote(answer.option);
+    },
+    "aria-label": answer.option,
+    disabled: disable
   }, answer.option) : /*#__PURE__*/React.createElement("div", {
     className: `animate__animated animate__fadeIn animate__faster result`,
     style: {
       color: colors[0],
-      borderColor: colors[1]
+      borderColor: colors[1],
+      padding: '0px 15px'
     }
   }, /*#__PURE__*/React.createElement("div", {
     className: "fill",

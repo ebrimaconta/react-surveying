@@ -97,10 +97,71 @@ describe('ReactSurvey', () => {
     fireEvent.click(happyButton);
 
     // Check that the onVoteMock is called with the correct argument
-    expect(onVoteMock).toHaveBeenCalledWith('Happy');
+    expect(onVoteMock).toHaveBeenCalledWith(answers[0]);
 
     // Check that the vote count has increased
     const votesText = getByText('1 vote');
     expect(votesText).toBeInTheDocument();
+  });
+  it('disables buttons if user has already voted', () => {
+    const question = 'How do you feel today?';
+    const answers = [
+      { option: 'Happy', votes: 0 },
+      { option: 'Sad', votes: 0 },
+    ];
+    const onVoteMock = jest.fn();
+    const userEmail = 'test@example.com';
+    const listVoted = [userEmail];
+
+    const { getByText } = render(
+      <ReactSurvey
+        question={question}
+        answers={answers}
+        onVote={onVoteMock}
+        userEmail={userEmail}
+        listVoted={listVoted}
+      />
+    );
+
+    // Attempt to click the button and verify that onVoteMock is not called
+    answers.forEach((answer) => {
+      const button = getByText(answer.option);
+      fireEvent.click(button);
+      expect(onVoteMock).not.toHaveBeenCalled();
+    });
+  });
+
+  it('enables buttons if user has not voted', () => {
+    const question = 'How do you feel today?';
+    const answers = [
+      { option: 'Happy', votes: 0 },
+      { option: 'Sad', votes: 0 },
+    ];
+    const onVoteMock = jest.fn();
+    const userEmail = 'test@example.com';
+    const listVoted = [];
+
+    const { getByText } = render(
+      <ReactSurvey
+        question={question}
+        answers={answers}
+        onVote={onVoteMock}
+        userEmail={userEmail}
+        listVoted={listVoted}
+      />
+    );
+
+    // Check that the buttons are not disabled because the user has not voted
+    answers.forEach((answer) => {
+      const button = getByText(answer.option);
+      expect(button).not.toBeDisabled();
+    });
+
+    // Attempt to click the button and verify that onVoteMock is called
+    answers.forEach((answer, i) => {
+      const button = getByText(answer.option);
+      fireEvent.click(button);
+      expect(onVoteMock).toHaveBeenCalled();
+    });
   });
 });
