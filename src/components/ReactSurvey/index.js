@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import 'animate.css';
+
 import './index.css';
+import 'animate.css';
 
 const themes = {
   purple: ['#6D4B94', '#7C6497', '#6D4B943B'],
@@ -26,13 +27,8 @@ export const ReactSurvey = ({
   },
   disable = false,
 }) => {
-  const [pollData, setPollData] = useState({
-    poll: {
-      voted: false,
-      option: '',
-    },
-    totalVotes: 0,
-  });
+  const [totalVotes, setTotalVotes] = useState(0);
+  const [voted, setVoted] = useState(false);
 
   const calculatePercent = (votes, total) => {
     if (votes === 0 && total === 0) {
@@ -61,32 +57,8 @@ export const ReactSurvey = ({
   const colors = obtainColors(customStyles.theme);
 
   const setPollVote = (selectedAnswer) => {
-    const optionsOnly = answers.map((item) => item.option);
-    console.log('selectedAnswer', selectedAnswer);
-    if (optionsOnly.includes(selectedAnswer)) {
-      const { poll, totalVotes } = pollData;
-      const updatedPoll = {
-        ...poll,
-        voted: true,
-        option: selectedAnswer,
-      };
-
-      if (!disable) {
-        if (!poll.voted) {
-          setPollData(() => ({
-            poll: updatedPoll,
-            totalVotes: totalVotes + 1,
-          }));
-          console.log('not voted');
-        } else {
-          console.log(' voted');
-          setPollData((prev) => ({
-            ...prev,
-            poll: updatedPoll,
-          }));
-        }
-      }
-    }
+    setVoted(true);
+    
   };
 
   const checkVote = () => {
@@ -100,29 +72,26 @@ export const ReactSurvey = ({
 
   useEffect(() => {
     if (!noStorage) checkVote();
-    
-    setPollData((prev) => ({
-      ...prev,
-      totalVotes: answers.reduce((total, answer) => total + answer.votes, 0),
-    }));
   }, []);
 
- 
   const getStoragePolls = () => JSON.parse(localStorage.getItem('react-polls')) || [];
   const vote = (answer) => {
-    if (!noStorage) {
-      const storage = getStoragePolls();
-      storage.push({
-        url: window.location.href,
-        question: question,
-        option: answer,
-      });
-      localStorage.setItem('react-polls', JSON.stringify(storage));
+    if (voted === false) {
+      setTotalVotes(totalVotes + 1);
+      setVoted(!voted);
+      if (!noStorage) {
+        const storage = getStoragePolls();
+        storage.push({
+          url: window.location.href,
+          question: question,
+          option: answer,
+        });
+        localStorage.setItem('react-polls', JSON.stringify(storage));
+      }
     }
-    setPollVote(answer);
     onVote(answer);
   };
-  const { poll, totalVotes } = pollData;
+
   return (
     <article
       className={`animate__animated animate__fadeIn animate__faster poll`}
@@ -145,12 +114,12 @@ export const ReactSurvey = ({
       <ul className='answers'>
         {answers.map((answer) => (
           <li key={answer.option}>
-            {!poll.voted ? (
+            {!voted ? (
               <button
                 className={`animate__animated  animate__fadeIn animate__faster  option ${customStyles.theme}`}
                 style={{ color: colors[0], borderColor: colors[1] }}
                 type='button'
-                onClick={() => vote(answer.option)}
+                onClick={(e) => vote(answer.option)}
                 aria-label={answer.option}
               >
                 {answer.option}
@@ -171,10 +140,7 @@ export const ReactSurvey = ({
                   <span className='percent' style={{ color: colors[0] }}>
                     {calculatePercent(answer.votes, totalVotes)}
                   </span>
-                  <span
-                    className={`answer ${answer.option === poll.option ? 'vote' : ''}`}
-                    style={{ color: colors[0] }}
-                  >
+                  <span className={`answer ${voted ? 'vote' : ''}`} style={{ color: colors[0] }}>
                     {answer.option}
                   </span>
                 </div>

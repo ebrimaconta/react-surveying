@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import animate from '../../node_modules/animate.css/animate.css';
+import React, { useState, useEffect } from 'react';
+import '../../../node_modules/animate.css/animate.css';
 
 function styleInject(css, ref) {
   if ( ref === void 0 ) ref = {};
@@ -28,8 +28,7 @@ function styleInject(css, ref) {
   }
 }
 
-var css = ".index_poll__2yY-U {\n    border-radius: 5px;\n    display: flex;\n    flex-direction: column;\n    align-items: center;\n    font-family: inherit;\n    padding: 10px;\n}\n\n.index_poll__2yY-U * {\n    box-sizing: border-box;\n}\n\n.index_poll__2yY-U .index_question__BzHoV {\n    color: #3a3a3a;\n    text-align: inherit;\n    font-weight: normal;\n    margin: 0;\n    padding-bottom: 3px;\n    border-bottom: 1px solid #6d4b943b;\n}\n\n.index_poll__2yY-U .index_answers__go1Gc {\n    list-style: none;\n    margin: 0;\n    padding: 0;\n    display: flex;\n    flex-direction: column;\n    justify-content: center;\n    align-items: center;\n    width: 100%;\n    margin: 5px 0;\n}\n\n.index_poll__2yY-U .index_answers__go1Gc li {\n    width: 100%;\n    margin: 5px 0;\n}\n\n.index_poll__2yY-U .index_answers__go1Gc .index_option__3YPIm,\n.index_poll__2yY-U .index_answers__go1Gc .index_result__1E2_8 {\n    font-weight: bold;\n    border: 2px solid #000000;\n    border-radius: 5px;\n    cursor: pointer;\n    width: 100%;\n    font-size: 100%;\n    line-height: 1.15;\n    margin: 0;\n    padding: 10px;\n    transition: all 0.3s ease;\n    outline: 0;\n    font-family: inherit;\n    background-color: inherit;\n}\n\n.index_poll__2yY-U .index_answers__go1Gc .index_option__3YPIm:hover,\n.index_poll__2yY-U .index_answers__go1Gc .index_option__3YPIm:active {\n    background: #3030303B;\n}\n\n.index_poll__2yY-U .index_answers__go1Gc .index_option__3YPIm.index_purple__1VjHW:hover,\n.index_poll__2yY-U .index_answers__go1Gc .index_option__3YPIm.index_purple__1VjHW:active {\n    background: #6d4b943B;\n}\n\n.index_poll__2yY-U .index_answers__go1Gc .index_option__3YPIm.index_red__w1X4P:hover,\n.index_poll__2yY-U .index_answers__go1Gc .index_option__3YPIm.index_red__w1X4P:active {\n    background: #FF28283B;\n}\n\n.index_poll__2yY-U .index_answers__go1Gc .index_option__3YPIm.index_blue__YvkSO:hover,\n.index_poll__2yY-U .index_answers__go1Gc .index_option__3YPIm.index_blue__YvkSO:active {\n    background: #283EFF3B;\n}\n\n.index_poll__2yY-U .index_answers__go1Gc .index_option__3YPIm.index_white__5BFdc:hover,\n.index_poll__2yY-U .index_answers__go1Gc .index_option__3YPIm.index_white__5BFdc:active {\n    background: #ffffff3B;\n}\n\n.index_poll__2yY-U .index_answers__go1Gc .index_option__3YPIm.index_cyan__2im9v:hover,\n.index_poll__2yY-U .index_answers__go1Gc .index_option__3YPIm.index_cyan__2im9v:active {\n    background: #00BCDD3B;\n}\n\n.index_poll__2yY-U .index_answers__go1Gc .index_result__1E2_8 {\n    height: 42px;\n    padding: 0;\n    cursor: default;\n    position: relative;\n}\n\n.index_poll__2yY-U .index_answers__go1Gc .index_result__1E2_8 .index_fill__2l7Nj {\n    width: 0%;\n    height: 100%;\n    border-radius: 3px;\n    display: flex;\n    align-items: center;\n    transition: all 0.5s ease;\n}\n\n.index_poll__2yY-U .index_answers__go1Gc .index_result__1E2_8 .index_labels__1uI5z {\n    position: absolute;\n    top: calc(19px - 9px);\n    margin: 0 10px;\n    font-size: 16px;\n}\n\n.index_poll__2yY-U .index_answers__go1Gc .index_result__1E2_8 .index_answer__2yafV {\n    margin-left: 15px;\n    text-overflow: ellipsis;\n    overflow: hidden;\n    white-space: nowrap;\n}\n\n.index_poll__2yY-U .index_answers__go1Gc .index_result__1E2_8 .index_answer__2yafV.index_vote__gKXll::after {\n    content: ' \\2713';\n}\n\n.index_poll__2yY-U .index_votes__1GglY {\n    text-align: inherit;\n    margin: 0;\n    padding: 0;\n    font-size: 13px;\n    color: #3030305e;\n}";
-var styles = {"poll":"index_poll__2yY-U","question":"index_question__BzHoV","answers":"index_answers__go1Gc","option":"index_option__3YPIm","result":"index_result__1E2_8","purple":"index_purple__1VjHW","red":"index_red__w1X4P","blue":"index_blue__YvkSO","white":"index_white__5BFdc","cyan":"index_cyan__2im9v","fill":"index_fill__2l7Nj","labels":"index_labels__1uI5z","answer":"index_answer__2yafV","vote":"index_vote__gKXll","votes":"index_votes__1GglY"};
+var css = ".poll{border-radius:5px;display:flex;flex-direction:column;align-items:center;font-family:inherit;padding:10px}.poll *{box-sizing:border-box}.poll .question{color:#3a3a3a;text-align:inherit;font-weight:400;margin:0;padding-bottom:3px;border-bottom:1px solid #6d4b943b}.poll .answers{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%;margin:5px 0}.poll .answers li{width:100%;margin:5px 0}.poll .answers .option,.poll .answers .result{font-weight:700;border:2px solid #000;border-radius:5px;cursor:pointer;width:100%;font-size:100%;line-height:1.15;margin:0;padding:10px;transition:all .3s ease;outline:0;font-family:inherit;background-color:inherit}.poll .answers .option:active,.poll .answers .option:hover{background:#3030303B}.poll .answers .option.purple:active,.poll .answers .option.purple:hover{background:#6d4b943B}.poll .answers .option.red:active,.poll .answers .option.red:hover{background:#FF28283B}.poll .answers .option.blue:active,.poll .answers .option.blue:hover{background:#283EFF3B}.poll .answers .option.white:active,.poll .answers .option.white:hover{background:#ffffff3B}.poll .answers .option.cyan:active,.poll .answers .option.cyan:hover{background:#00BCDD3B}.poll .answers .result{height:42px;padding:0;cursor:default;position:relative}.poll .answers .result .fill{width:0;margin-top:10px;border-radius:3px;display:flex;align-items:center;transition:all .5s ease}.poll .answers .result .labels{position:absolute;top:10px;margin:0 10px;font-size:16px}.poll .answers .result .answer{margin-left:15px;text-overflow:ellipsis;overflow:hidden;white-space:nowrap}.poll .answers .result .answer.vote:after{content:\" \\2713\"}.poll .votes{text-align:inherit;margin:0;padding:0;font-size:13px;color:#3030305e}";
 styleInject(css);
 
 const themes = {
@@ -44,21 +43,29 @@ const ReactSurvey = ({
   question,
   answers,
   onVote,
-  customStyles,
-  disable
+  noStorage,
+  customStyles = {
+    questionSeparator: true,
+    questionSeparatorWidth: 'question',
+    questionBold: true,
+    questionColor: '#303030',
+    align: 'center',
+    theme: 'black'
+  },
+  disable = false
 }) => {
   const [pollData, setPollData] = useState({
     poll: {
       voted: false,
       option: ''
     },
-    totalVotes: answers.reduce((total, answer) => total + answer.votes, 0)
+    totalVotes: 0
   });
   const calculatePercent = (votes, total) => {
     if (votes === 0 && total === 0) {
       return '0%';
     }
-    return `${parseInt(votes / total * 100)}%`;
+    return `${parseInt(votes / total * 100, 10)}%`;
   };
   const alignPoll = customAlign => {
     if (customAlign === 'left') {
@@ -79,6 +86,7 @@ const ReactSurvey = ({
   const colors = obtainColors(customStyles.theme);
   const setPollVote = selectedAnswer => {
     const optionsOnly = answers.map(item => item.option);
+    console.log('selectedAnswer', selectedAnswer);
     if (optionsOnly.includes(selectedAnswer)) {
       const {
         poll,
@@ -90,31 +98,62 @@ const ReactSurvey = ({
         option: selectedAnswer
       };
       if (!disable) {
-        if (!vote) {
-          setPollData({
+        if (!poll.voted) {
+          setPollData(() => ({
             poll: updatedPoll,
             totalVotes: totalVotes + 1
-          });
+          }));
+          console.log('not voted');
         } else {
-          setPollData({
+          console.log(' voted');
+          setPollData(prev => ({
+            ...prev,
             poll: updatedPoll
-          });
+          }));
         }
       }
     }
   };
+  const checkVote = () => {
+    const storage = getStoragePolls();
+    const answer = storage.filter(answer => answer.question === question && answer.url === window.location.href);
+    if (answer.length) {
+      setPollVote(answer[0].option);
+    }
+  };
+  useEffect(() => {
+    if (!noStorage) checkVote();
+    setPollData(prev => ({
+      ...prev,
+      totalVotes: answers.reduce((total, answer) => total + answer.votes, 0)
+    }));
+  }, []);
+  const getStoragePolls = () => JSON.parse(localStorage.getItem('react-polls')) || [];
   const vote = answer => {
+    if (!noStorage) {
+      const storage = getStoragePolls();
+      storage.push({
+        url: window.location.href,
+        question: question,
+        option: answer
+      });
+      localStorage.setItem('react-polls', JSON.stringify(storage));
+    }
     setPollVote(answer);
     onVote(answer);
   };
+  const {
+    poll,
+    totalVotes
+  } = pollData;
   return /*#__PURE__*/React.createElement("article", {
-    className: `${animate.animated} ${animate.fadeIn} ${animate.faster} ${styles.poll}`,
+    className: `animate__animated animate__fadeIn animate__faster poll`,
     style: {
       textAlign: customStyles.align,
       alignItems: alignPoll(customStyles.align)
     }
   }, /*#__PURE__*/React.createElement("h3", {
-    className: styles.question,
+    className: "question",
     style: {
       borderWidth: customStyles.questionSeparator ? '1px' : '0',
       alignSelf: customStyles.questionSeparatorWidth === 'question' ? 'center' : 'stretch',
@@ -122,43 +161,44 @@ const ReactSurvey = ({
       color: customStyles.questionColor
     }
   }, question), /*#__PURE__*/React.createElement("ul", {
-    className: styles.answers
+    className: "answers"
   }, answers.map(answer => /*#__PURE__*/React.createElement("li", {
     key: answer.option
   }, !poll.voted ? /*#__PURE__*/React.createElement("button", {
-    className: `${animate.animated} ${animate.fadeIn} ${animate.faster} ${styles.option} ${styles[customStyles.theme]}`,
+    className: `animate__animated  animate__fadeIn animate__faster  option ${customStyles.theme}`,
     style: {
       color: colors[0],
       borderColor: colors[1]
     },
     type: "button",
-    onClick: () => vote(answer.option)
+    onClick: () => vote(answer.option),
+    "aria-label": answer.option
   }, answer.option) : /*#__PURE__*/React.createElement("div", {
-    className: `${animate.animated} ${animate.fadeIn} ${animate.faster} ${styles.result}`,
+    className: `animate__animated animate__fadeIn animate__faster result`,
     style: {
       color: colors[0],
       borderColor: colors[1]
     }
   }, /*#__PURE__*/React.createElement("div", {
-    className: styles.fill,
+    className: "fill",
     style: {
       width: calculatePercent(answer.votes, totalVotes),
       backgroundColor: colors[2]
     }
   }), /*#__PURE__*/React.createElement("div", {
-    className: styles.labels
+    className: "label"
   }, /*#__PURE__*/React.createElement("span", {
-    className: styles.percent,
+    className: "percent",
     style: {
       color: colors[0]
     }
   }, calculatePercent(answer.votes, totalVotes)), /*#__PURE__*/React.createElement("span", {
-    className: `${styles.answer} ${answer.option === poll.option ? styles.vote : ''}`,
+    className: `answer ${answer.option === poll.option ? 'vote' : ''}`,
     style: {
       color: colors[0]
     }
   }, answer.option)))))), /*#__PURE__*/React.createElement("p", {
-    className: styles.votes
+    className: "votes"
   }, `${totalVotes} vote${totalVotes !== 1 ? 's' : ''}`));
 };
 

@@ -6,11 +6,10 @@ import resolve from 'rollup-plugin-node-resolve';
 import url from 'rollup-plugin-url';
 import svgr from '@svgr/rollup';
 import autoExternal from 'rollup-plugin-auto-external';
-
 import pkg from './package.json';
 
 export default {
-  input: 'components/ReactSurvey/index.js',
+  input: 'src/components/ReactSurvey/index.js',
   output: [
     {
       file: pkg.main,
@@ -26,7 +25,9 @@ export default {
   plugins: [
     external(),
     postcss({
-      modules: true,
+      extract: false,
+      minimize: true,
+      inject: true,
     }),
     url(),
     svgr(),
