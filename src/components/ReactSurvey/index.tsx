@@ -2,7 +2,13 @@ import React, { useState, useEffect } from 'react';
 
 import './index.css';
 
-const themes = {
+type ThemeColor = [string, string, string];
+
+interface Themes {
+  [key: string]: ThemeColor;
+}
+
+const themes: Themes = {
   purple: ['#6D4B94', '#7C6497', '#6D4B943B'],
   red: ['#E23D3D', '#EF4545', '#FF28283B'],
   blue: ['#5674E0', '#5674E0', '#5674E03B'],
@@ -10,8 +16,29 @@ const themes = {
   white: ['#ffffff', '#ffffff', '#ffffff3B'],
   cyan: ['#00BCDD', '#00BCDD', '#00BCDD3B'],
 };
+interface Answer {
+  option: string;
+  votes: number;
+}
 
-export const ReactSurvey = ({
+interface ReactSurveyProps {
+  question: string;
+  answers: Answer[];
+  onVote: (answer: Answer) => void;
+  userEmail?: string;
+  listVoted?: string[];
+  customStyles?: {
+    questionSeparator: boolean;
+    questionSeparatorWidth: 'question' | 'stretch';
+    questionBold: boolean;
+    questionColor: string;
+    align: 'left' | 'right' | 'center';
+    theme: 'purple' | 'red' | 'blue' | 'black' | 'white' | 'cyan';
+  };
+  disable?: boolean;
+}
+
+export const ReactSurvey: React.FC<ReactSurveyProps> = ({
   question,
   answers,
   onVote,
@@ -30,14 +57,14 @@ export const ReactSurvey = ({
   const [totalVotes, setTotalVotes] = useState(0);
   const [voted, setVoted] = useState(false);
 
-  const calculatePercent = (votes, total) => {
+  const calculatePercent = (votes: number, total: number): string => {
     if (votes === 0 && total === 0) {
       return '0%';
     }
-    return `${parseInt((votes / total) * 100, 10)}%`;
+    return `${Math.round((votes / total) * 100)}%`;
   };
 
-  const alignPoll = (customAlign) => {
+  const alignPoll = (customAlign: string) => {
     if (customAlign === 'left') {
       return 'flex-start';
     } else if (customAlign === 'right') {
@@ -46,7 +73,7 @@ export const ReactSurvey = ({
       return 'center';
     }
   };
-  const obtainColors = (customTheme) => {
+  const obtainColors = (customTheme: string) => {
     const colors = themes[customTheme];
     if (!colors) {
       return themes['black'];
@@ -89,7 +116,7 @@ export const ReactSurvey = ({
         {question}
       </h3>
       <ul className='answers'>
-        {answers.map((answer) => (
+        {answers.map((answer: { option: string; votes: number }) => (
           <li key={answer.option}>
             {!checkIfVoted ? (
               <button
@@ -98,7 +125,7 @@ export const ReactSurvey = ({
                 type='button'
                 onClick={(e) => {
                   onVote(answer);
-                  vote(answer.option);
+                  vote();
                 }}
                 aria-label={answer.option}
                 disabled={disable}

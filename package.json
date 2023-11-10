@@ -27,6 +27,8 @@
     "@babel/preset-env": "^7.23.3",
     "@babel/preset-react": "^7.23.3",
     "@svgr/rollup": "^2.4.1",
+    "@types/react": "^18.2.37",
+    "@types/react-dom": "^18.2.15",
     "babel-eslint": "^10.1.0",
     "babel-plugin-external-helpers": "^6.22.0",
     "cross-env": "^5.1.4",
@@ -53,6 +55,7 @@
     "rollup-plugin-peer-deps-external": "^2.2.0",
     "rollup-plugin-postcss": "^1.6.2",
     "rollup-plugin-url": "^1.4.0",
+    "typescript": "^5.2.2",
     "webpack": "^5.89.0"
   },
   "files": [

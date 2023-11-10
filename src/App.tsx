@@ -1,6 +1,11 @@
 import React, { useState } from 'react';
 import { ReactSurvey } from './components/ReactSurvey';
 
+interface Answer {
+  option: string;
+  votes: number;
+}
+
 export const App = () => {
   const question = 'What is your favorite color?';
 
@@ -10,12 +15,13 @@ export const App = () => {
       { option: 'Blue', votes: 0 },
     ],
   });
-  const handleVote = (voteAnswer) => {
+  const handleVote = (voteAnswer: Answer) => {
     const { pollAnswers } = poll;
     const newPollAnswers = pollAnswers.map((answer) => {
-      if (answer.option === voteAnswer) answer.votes++;
+      if (answer.option === voteAnswer.option) answer.votes++;
       return answer;
     });
+
     setPoll({
       pollAnswers: newPollAnswers,
     });
