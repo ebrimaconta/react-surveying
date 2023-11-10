@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
 import './index.css';
-import 'animate.css';
 
 const themes = {
   purple: ['#6D4B94', '#7C6497', '#6D4B943B'],
@@ -56,9 +55,8 @@ export const ReactSurvey = ({
 
   const colors = obtainColors(customStyles.theme);
 
-  const setPollVote = (selectedAnswer) => {
+  const setPollVote = () => {
     setVoted(true);
-    
   };
 
   const checkVote = () => {
@@ -72,11 +70,12 @@ export const ReactSurvey = ({
 
   useEffect(() => {
     if (!noStorage) checkVote();
+    setTotalVotes(answers.reduce((total, answer) => total + answer.votes, 0));
   }, []);
 
   const getStoragePolls = () => JSON.parse(localStorage.getItem('react-polls')) || [];
   const vote = (answer) => {
-    if (voted === false) {
+    if (voted === false && !disable) {
       setTotalVotes(totalVotes + 1);
       setVoted(!voted);
       if (!noStorage) {
@@ -121,6 +120,7 @@ export const ReactSurvey = ({
                 type='button'
                 onClick={(e) => vote(answer.option)}
                 aria-label={answer.option}
+                disabled={disable}
               >
                 {answer.option}
               </button>

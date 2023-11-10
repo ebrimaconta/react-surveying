@@ -1,6 +1,6 @@
 {
   "name": "react-surveying",
-  "version": "1.1.7",
+  "version": "1.2.4",
   "private": false,
   "main": "dist/index.js",
   "module": "dist/index.es.js",
@@ -11,9 +11,15 @@
   },
   "scripts": {
     "test": "jest",
-    "build": "rollup -c",
+    "build": "yarn test && rollup -c",
     "start": "react-scripts start",
+    "prepare": "npm test",
     "deploy": "cd example && npm install && npm run build"
+  },
+  "husky": {
+    "hooks": {
+      "pre-push": "yarn test"
+    }
   },
   "peerDependencies": {
     "prop-types": "^15.5.4",
@@ -40,6 +46,7 @@
     "eslint-plugin-react": "^7.10.0",
     "eslint-plugin-standard": "^3.1.0",
     "gh-pages": "^1.2.0",
+    "husky": "^8.0.3",
     "identity-obj-proxy": "^3.0.0",
     "jest-environment-jsdom": "^29.7.0",
     "react": "^18.2.0",
@@ -88,7 +95,6 @@
     "@babel/plugin-syntax-import-meta": "^7.0.0",
     "@testing-library/jest-dom": "^6.1.4",
     "@testing-library/react": "^14.1.0",
-    "animate.css": "^4.1.1",
     "babel-core": "7.0.0-bridge.0",
     "babel-jest": "^29.7.0",
     "jest": "^29.7.0",

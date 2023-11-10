@@ -6,7 +6,7 @@ export const App = () => {
 
   const [poll, setPoll] = useState({
     pollAnswers: [
-      { option: 'Red', votes: 0 },
+      { option: 'Red', votes: 19 },
       { option: 'Blue', votes: 0 },
     ],
   });

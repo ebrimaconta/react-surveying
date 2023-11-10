@@ -6,7 +6,6 @@ function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'defau
 
 var React = require('react');
 var React__default = _interopDefault(React);
-require('../../../node_modules/animate.css/animate.css');
 
 function styleInject(css, ref) {
   if ( ref === void 0 ) ref = {};
@@ -61,13 +60,8 @@ const ReactSurvey = ({
   },
   disable = false
 }) => {
-  const [pollData, setPollData] = React.useState({
-    poll: {
-      voted: false,
-      option: ''
-    },
-    totalVotes: 0
-  });
+  const [totalVotes, setTotalVotes] = React.useState(0);
+  const [voted, setVoted] = React.useState(false);
   const calculatePercent = (votes, total) => {
     if (votes === 0 && total === 0) {
       return '0%';
@@ -91,35 +85,8 @@ const ReactSurvey = ({
     return colors;
   };
   const colors = obtainColors(customStyles.theme);
-  const setPollVote = selectedAnswer => {
-    const optionsOnly = answers.map(item => item.option);
-    console.log('selectedAnswer', selectedAnswer);
-    if (optionsOnly.includes(selectedAnswer)) {
-      const {
-        poll,
-        totalVotes
-      } = pollData;
-      const updatedPoll = {
-        ...poll,
-        voted: true,
-        option: selectedAnswer
-      };
-      if (!disable) {
-        if (!poll.voted) {
-          setPollData(() => ({
-            poll: updatedPoll,
-            totalVotes: totalVotes + 1
-          }));
-          console.log('not voted');
-        } else {
-          console.log(' voted');
-          setPollData(prev => ({
-            ...prev,
-            poll: updatedPoll
-          }));
-        }
-      }
-    }
+  const setPollVote = () => {
+    setVoted(true);
   };
   const checkVote = () => {
     const storage = getStoragePolls();
@@ -130,29 +97,25 @@ const ReactSurvey = ({
   };
   React.useEffect(() => {
     if (!noStorage) checkVote();
-    setPollData(prev => ({
-      ...prev,
-      totalVotes: answers.reduce((total, answer) => total + answer.votes, 0)
-    }));
+    setTotalVotes(answers.reduce((total, answer) => total + answer.votes, 0));
   }, []);
   const getStoragePolls = () => JSON.parse(localStorage.getItem('react-polls')) || [];
   const vote = answer => {
-    if (!noStorage) {
-      const storage = getStoragePolls();
-      storage.push({
-        url: window.location.href,
-        question: question,
-        option: answer
-      });
-      localStorage.setItem('react-polls', JSON.stringify(storage));
+    if (voted === false && !disable) {
+      setTotalVotes(totalVotes + 1);
+      setVoted(!voted);
+      if (!noStorage) {
+        const storage = getStoragePolls();
+        storage.push({
+          url: window.location.href,
+          question: question,
+          option: answer
+        });
+        localStorage.setItem('react-polls', JSON.stringify(storage));
+      }
     }
-    setPollVote(answer);
     onVote(answer);
   };
-  const {
-    poll,
-    totalVotes
-  } = pollData;
   return /*#__PURE__*/React__default.createElement("article", {
     className: `animate__animated animate__fadeIn animate__faster poll`,
     style: {
@@ -171,14 +134,14 @@ const ReactSurvey = ({
     className: "answers"
   }, answers.map(answer => /*#__PURE__*/React__default.createElement("li", {
     key: answer.option
-  }, !poll.voted ? /*#__PURE__*/React__default.createElement("button", {
+  }, !voted ? /*#__PURE__*/React__default.createElement("button", {
     className: `animate__animated  animate__fadeIn animate__faster  option ${customStyles.theme}`,
     style: {
       color: colors[0],
       borderColor: colors[1]
     },
     type: "button",
-    onClick: () => vote(answer.option),
+    onClick: e => vote(answer.option),
     "aria-label": answer.option
   }, answer.option) : /*#__PURE__*/React__default.createElement("div", {
     className: `animate__animated animate__fadeIn animate__faster result`,
@@ -200,7 +163,7 @@ const ReactSurvey = ({
       color: colors[0]
     }
   }, calculatePercent(answer.votes, totalVotes)), /*#__PURE__*/React__default.createElement("span", {
-    className: `answer ${answer.option === poll.option ? 'vote' : ''}`,
+    className: `answer ${voted ? 'vote' : ''}`,
     style: {
       color: colors[0]
     }
