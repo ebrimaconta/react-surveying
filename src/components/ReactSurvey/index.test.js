@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, fireEvent } from '@testing-library/react';
-import { ReactSurvey } from '.';
+import { ReactSurvey } from '../ReactSurvey';
 
 describe('ReactSurvey', () => {
   const question = 'What is your favorite color?';
