@@ -61,7 +61,10 @@ export const ReactSurvey: React.FC<ReactSurveyProps> = ({
     if (votes === 0 && total === 0) {
       return '0%';
     }
-    return `${Math.round((votes / total) * 100)}%`;
+    const percentage = Math.round((votes / total) * 100);
+    const clampedPercentage = Math.min(percentage, 100);
+
+    return `${clampedPercentage}%`;
   };
 
   const alignPoll = (customAlign: string) => {
@@ -86,15 +89,13 @@ export const ReactSurvey: React.FC<ReactSurveyProps> = ({
   useEffect(() => {
     setTotalVotes(answers.reduce((total, answer) => total + answer.votes, 0));
   }, []);
-
+  const checkIfVoted = listVoted.includes(userEmail);
   const vote = () => {
-    if (!disable) {
+    if (!disable && !checkIfVoted) {
       setTotalVotes(totalVotes + 1);
       setVoted(!voted);
     }
   };
-
-  const checkIfVoted = listVoted.includes(userEmail);
 
   return (
     <article
