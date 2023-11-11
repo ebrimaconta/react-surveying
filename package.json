@@ -12,7 +12,8 @@
     "test": "jest ",
     "build": "yarn test && rollup -c",
     "start": "react-scripts start",
-    "deploy": "cd example && npm install && npm run build"
+    "deploy": "cd example && npm install && npm run build",
+    "cypress:run": "cypress run"
   },
   "peerDependencies": {
     "prop-types": "^15.5.4",
