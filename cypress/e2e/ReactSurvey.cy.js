@@ -1,6 +1,6 @@
 describe('ReactSurvey', () => {
   beforeEach(() => {
-    cy.visit('http://localhost:3000'); // Replace with the URL where your component is hosted
+    cy.visit('http://localhost:3001'); // Replace with the URL where your component is hosted
   });
 
   it('displays the survey question and options', () => {
