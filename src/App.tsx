@@ -8,7 +8,7 @@ interface Answer {
 
 export const App = () => {
   const question = 'What is your favorite color?';
-  const [voteList, setListVoted] = useState([]);
+
   const [vote, setVote] = useState(false);
   const [poll, setPoll] = useState({
     pollAnswers: [
@@ -23,16 +23,13 @@ export const App = () => {
       return answer;
     });
 
-    setListVoted(voteList);
     setVote(true);
     setPoll({
       pollAnswers: newPollAnswers,
     });
   };
 
-  return (
-    <ReactSurvey vote={vote} listVoted={voteList} question={question} answers={poll.pollAnswers} onVote={handleVote} />
-  );
+  return <ReactSurvey vote={vote} question={question} answers={poll.pollAnswers} onVote={handleVote} />;
 };
 
 export default App;

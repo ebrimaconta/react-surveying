@@ -25,8 +25,6 @@ interface ReactSurveyProps {
   question: string;
   answers: Answer[];
   onVote: (answer: Answer) => void;
-  userEmail?: string;
-  listVoted?: string[];
   customStyles?: {
     questionSeparator: boolean;
     questionSeparatorWidth: 'question' | 'stretch';
