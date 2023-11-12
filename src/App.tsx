@@ -9,6 +9,7 @@ interface Answer {
 export const App = () => {
   const question = 'What is your favorite color?';
   const [voteList, setListVoted] = useState([]);
+  const [vote, setVote] = useState(false);
   const [poll, setPoll] = useState({
     pollAnswers: [
       { option: 'Red', votes: 19 },
@@ -21,22 +22,16 @@ export const App = () => {
       if (answer.option === voteAnswer.option) answer.votes++;
       return answer;
     });
-    voteList.push('ebrimaconta@gmail.com');
+
     setListVoted(voteList);
-    
+    setVote(true);
     setPoll({
       pollAnswers: newPollAnswers,
     });
   };
 
   return (
-    <ReactSurvey
-      userEmail={'ebrimaconta@gmail.com'}
-      listVoted={voteList}
-      question={question}
-      answers={poll.pollAnswers}
-      onVote={handleVote}
-    />
+    <ReactSurvey vote={vote} listVoted={voteList} question={question} answers={poll.pollAnswers} onVote={handleVote} />
   );
 };
 

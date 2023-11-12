@@ -14,11 +14,7 @@ module.exports = {
             format: 'cjs',
             sourcemap: true,
         },
-        {
-            file: 'dist/index.es.js',
-            format: 'es',
-            sourcemap: true,
-        },
+
     ],
     plugins: [
         typescript(),

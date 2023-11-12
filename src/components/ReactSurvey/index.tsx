@@ -36,14 +36,13 @@ interface ReactSurveyProps {
     theme: 'purple' | 'red' | 'blue' | 'black' | 'white' | 'cyan';
   };
   disable?: boolean;
+  vote: boolean;
 }
 
 export const ReactSurvey: React.FC<ReactSurveyProps> = ({
   question,
   answers,
   onVote,
-  userEmail = '',
-  listVoted = [],
   customStyles = {
     questionSeparator: true,
     questionSeparatorWidth: 'question',
@@ -53,9 +52,9 @@ export const ReactSurvey: React.FC<ReactSurveyProps> = ({
     theme: 'black',
   },
   disable = false,
+  vote,
 }) => {
   const [totalVotes, setTotalVotes] = useState(0);
-  const [voted, setVoted] = useState(false);
 
   const calculatePercent = (votes: number, total: number): string => {
     if (votes === 0 && total === 0) {
@@ -89,11 +88,10 @@ export const ReactSurvey: React.FC<ReactSurveyProps> = ({
   useEffect(() => {
     setTotalVotes(answers.reduce((total, answer) => total + answer.votes, 0));
   }, []);
-  const checkIfVoted = listVoted.includes(userEmail);
-  const vote = () => {
-    if (!disable && !checkIfVoted) {
+
+  const votedHandler = () => {
+    if (!disable && !vote) {
       setTotalVotes(totalVotes + 1);
-      setVoted(!voted);
     }
   };
 
@@ -119,14 +117,14 @@ export const ReactSurvey: React.FC<ReactSurveyProps> = ({
       <ul className='answers'>
         {answers.map((answer: { option: string; votes: number }) => (
           <li key={answer.option}>
-            {!checkIfVoted ? (
+            {!vote ? (
               <button
                 className={`animate__animated  animate__fadeIn animate__faster  option ${customStyles.theme}`}
                 style={{ color: colors[0], borderColor: colors[1] }}
                 type='button'
                 onClick={(e) => {
                   onVote(answer);
-                  vote();
+                  votedHandler();
                 }}
                 aria-label={answer.option}
                 disabled={disable}
@@ -149,7 +147,7 @@ export const ReactSurvey: React.FC<ReactSurveyProps> = ({
                   <span className='percent' style={{ color: colors[0] }}>
                     {calculatePercent(answer.votes, totalVotes)}
                   </span>
-                  <span className={`answer ${voted ? 'vote' : ''}`} style={{ color: colors[0] }}>
+                  <span className={`answer ${vote ? 'vote' : ''}`} style={{ color: colors[0] }}>
                     {answer.option}
                   </span>
                 </div>

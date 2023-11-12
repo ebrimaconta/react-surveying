@@ -1,6 +1,6 @@
 describe('ReactSurvey', () => {
   beforeEach(() => {
-    cy.visit('http://localhost:3001'); // Replace with the URL where your component is hosted
+    cy.visit('http://localhost:3000'); // Replace with the URL where your component is hosted
   });
   it('renders the survey with options', () => {
     cy.get('.poll').should('exist');
@@ -26,6 +26,19 @@ describe('ReactSurvey', () => {
         cy.wrap($element).should('have.text', '100%');
       } else if (index === 1) {
         cy.wrap($element).should('have.text', '0%');
+      }
+    });
+  });
+
+  it('click on second option after voting', () => {
+    cy.get('.option')
+      .eq(1)
+      .click();
+    cy.get('.percent').each(($element, index) => {
+      if (index === 0) {
+        cy.wrap($element).should('have.text', '95%');
+      } else if (index === 1) {
+        cy.wrap($element).should('have.text', '5%');
       }
     });
   });

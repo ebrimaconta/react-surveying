@@ -41,21 +41,22 @@ var themes = {
     cyan: ['#00BCDD', '#00BCDD', '#00BCDD3B'],
 };
 var ReactSurvey = function (_a) {
-    var question = _a.question, answers = _a.answers, onVote = _a.onVote, _b = _a.userEmail, userEmail = _b === void 0 ? '' : _b, _c = _a.listVoted, listVoted = _c === void 0 ? [] : _c, _d = _a.customStyles, customStyles = _d === void 0 ? {
+    var question = _a.question, answers = _a.answers, onVote = _a.onVote, _b = _a.customStyles, customStyles = _b === void 0 ? {
         questionSeparator: true,
         questionSeparatorWidth: 'question',
         questionBold: true,
         questionColor: '#303030',
         align: 'center',
         theme: 'black',
-    } : _d, _e = _a.disable, disable = _e === void 0 ? false : _e;
-    var _f = React.useState(0), totalVotes = _f[0], setTotalVotes = _f[1];
-    var _g = React.useState(false), voted = _g[0], setVoted = _g[1];
+    } : _b, _c = _a.disable, disable = _c === void 0 ? false : _c, vote = _a.vote;
+    var _d = React.useState(0), totalVotes = _d[0], setTotalVotes = _d[1];
     var calculatePercent = function (votes, total) {
         if (votes === 0 && total === 0) {
             return '0%';
         }
-        return "".concat(Math.round((votes / total) * 100), "%");
+        var percentage = Math.round((votes / total) * 100);
+        var clampedPercentage = Math.min(percentage, 100);
+        return "".concat(clampedPercentage, "%");
     };
     var alignPoll = function (customAlign) {
         if (customAlign === 'left') {
@@ -79,13 +80,11 @@ var ReactSurvey = function (_a) {
     React.useEffect(function () {
         setTotalVotes(answers.reduce(function (total, answer) { return total + answer.votes; }, 0));
     }, []);
-    var vote = function () {
-        if (!disable) {
+    var votedHandler = function () {
+        if (!disable && !vote) {
             setTotalVotes(totalVotes + 1);
-            setVoted(!voted);
         }
     };
-    var checkIfVoted = listVoted.includes(userEmail);
     return (React.createElement("article", { className: "animate__animated animate__fadeIn animate__faster poll", style: {
             textAlign: customStyles.align,
             alignItems: alignPoll(customStyles.align),
@@ -96,9 +95,9 @@ var ReactSurvey = function (_a) {
                 fontWeight: customStyles.questionBold ? 'bold' : 'normal',
                 color: customStyles.questionColor,
             } }, question),
-        React.createElement("ul", { className: 'answers' }, answers.map(function (answer) { return (React.createElement("li", { key: answer.option }, !checkIfVoted ? (React.createElement("button", { className: "animate__animated  animate__fadeIn animate__faster  option ".concat(customStyles.theme), style: { color: colors[0], borderColor: colors[1] }, type: 'button', onClick: function (e) {
+        React.createElement("ul", { className: 'answers' }, answers.map(function (answer) { return (React.createElement("li", { key: answer.option }, !vote ? (React.createElement("button", { className: "animate__animated  animate__fadeIn animate__faster  option ".concat(customStyles.theme), style: { color: colors[0], borderColor: colors[1] }, type: 'button', onClick: function (e) {
                 onVote(answer);
-                vote();
+                votedHandler();
             }, "aria-label": answer.option, disabled: disable }, answer.option)) : (React.createElement("div", { className: "animate__animated animate__fadeIn animate__faster result", style: { color: colors[0], borderColor: colors[1], padding: '0px 15px' } },
             React.createElement("div", { className: 'fill', style: {
                     width: calculatePercent(answer.votes, totalVotes),
@@ -106,7 +105,7 @@ var ReactSurvey = function (_a) {
                 } }),
             React.createElement("div", { className: 'label' },
                 React.createElement("span", { className: 'percent', style: { color: colors[0] } }, calculatePercent(answer.votes, totalVotes)),
-                React.createElement("span", { className: "answer ".concat(voted ? 'vote' : ''), style: { color: colors[0] } }, answer.option)))))); })),
+                React.createElement("span", { className: "answer ".concat(vote ? 'vote' : ''), style: { color: colors[0] } }, answer.option)))))); })),
         React.createElement("p", { className: 'votes' }, "".concat(totalVotes, " vote").concat(totalVotes !== 1 ? 's' : ''))));
 };
 
