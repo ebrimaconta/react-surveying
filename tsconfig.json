@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "jsx": "react",
+    "lib": ["dom", "esnext"],
+    "module": "esnext",
+    "esModuleInterop": true,
+    "moduleResolution": "Node"
+  },
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.tsx",
+    "src/**/*.test.tsx",
+    "src/**/*.test.ts",
+    "src/**/*.test.jsx",
+    "src/**/*.test.js"
+  ],
+  "exclude": ["node_modules"]
+}
