@@ -2,8 +2,6 @@
 
 A modern, customizable polling component for React applications that allows users to create and participate in interactive polls with various styling options.
 
-![React Surveying Demo](https://via.placeholder.com/800x400?text=React+Surveying+Demo)
-
 ## Features
 
 - 🎨 Multiple theme options (purple, red, blue, black, white, cyan)
